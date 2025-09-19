@@ -1,0 +1,85 @@
+# Criação dos namespaces
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: hml
+---
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: prd
+---
+
+# Deployment no namespace dev
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-java-api
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-api
+  template:
+    metadata:
+      labels:
+        app: java-api
+        env: dev
+    spec:
+      containers:
+        - name: java-api
+          image: iesodias/java-api:latest
+          ports:
+            - containerPort: 8081
+---
+# Deployment no namespace hml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-java-api
+  namespace: hml
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: java-api
+  template:
+    metadata:
+      labels:
+        app: java-api
+        env: hml
+    spec:
+      containers:
+        - name: java-api
+          image: iesodias/java-api:latest
+          ports:
+            - containerPort: 8081
+---
+# Deployment no namespace prd
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-java-api
+  namespace: prd
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: java-api
+  template:
+    metadata:
+      labels:
+        app: java-api
+        env: prd
+    spec:
+      containers:
+        - name: java-api
+          image: iesodias/java-api:latest
+          ports:
+            - containerPort: 8081            

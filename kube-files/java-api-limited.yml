@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-api-limited
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: java-api-limited
+  template:
+    metadata:
+      labels:
+        app: java-api-limited
+    spec:
+      containers:
+        - name: java-api
+          image: iesodias/java-api:latest
+          ports:
+            - containerPort: 8081
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"

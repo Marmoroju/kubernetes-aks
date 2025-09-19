@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+  name: java-api-replicaset
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: java-api
+  template:
+    metadata:
+      labels:
+        app: java-api
+    spec:
+      containers:
+        - name: java-api
+          image: iesodias/java-api:latest
+          ports:
+            - containerPort: 8081

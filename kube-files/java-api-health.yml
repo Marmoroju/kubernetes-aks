@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-api-health
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-api-health
+  template:
+    metadata:
+      labels:
+        app: java-api-health
+    spec:
+      containers:
+        - name: java-api
+          image: iesodias/java-api:latest
+          ports:
+            - containerPort: 8081
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 3
+            failureThreshold: 2
+
+
