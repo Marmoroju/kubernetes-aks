@@ -330,7 +330,72 @@ Acessar Health Check em:
 ```bash
 localhost:8081/actuator/health
 ```
-Editar o deployment em execução. Modificar algum campo para simular erro
+Editar o deployment em execução. Modificar algum campo para simular erro.
 ```bash
 kubectl edit deployment java-api-health
+```
+
+### HPA - Horizontal Pod Autoscaling
+Inciar
+```bash
+kubectl apply -f java-api-hpa.yml
+```
+
+Verificar HPA. Se acabou de subir o Pod, no campo `TARGETS` irá aparecer `<unknown>`, pois ainda não existe métrica para coletar.
+```bash
+watch -n1 kubectl get hpa
+
+watch -n1 kubectl get pods
+```
+
+### Ingress Controller
+o Ingress já foi provisionado através do arquivo `helm-ingress.tf`. Agora o Ingress com o Nginx irão cumprir o papel de um proxy-reverso, pois antes quando eram provisionados os Pods, provisionava um IP para cada, agora com o Ingress Controller você terá um domínio que por traz dele um proxy direciona as requisições `/`.
+
+Recuperar `EXTERNAL-IP` do Ingress. Ele será adicionado no arquivo yml referente ao controller.
+```bash
+kubectl get svc -n ingress-nginx ingress-nginx-con
+troller
+```
+Substitua no arquivo yml referente ao Ingress Controller onde no código abaixo exibe `<EXTERNAL-IP>`.
+```bash
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: java-api-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: java-api.<EXTERNAL-IP>.nip.io
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: java-api-service
+              port:
+                number: 80
+```          
+Acessar no navegador através do IP:
+```bash
+java-api.<EXTERNAL-IP>.nip.io
+```
+
+### KEDA - Kubernetes Event-Driven Autoscaling
+- [KEDA - DOC](https://keda.sh/docs/2.17/)
+- [TIMEZONE UTC](https://time.is/pt_br/UTC)
+
+Iniciar. Lembrando que o UTC da instancia do cluster está a 3h a frente do nosso horário, então será necessário fazer a alteração na tarefa cron. Considere acessar o link do `TIMEZONE UTC` para essa configuração.
+```bash
+kubectl apply -f java-api-keda-cron.yml
+```
+
+Verificar o Auto Scaling
+```bash
+watch -n1 kubectl get scaledobject
+
+watch -n1 kubectl get pods
 ```

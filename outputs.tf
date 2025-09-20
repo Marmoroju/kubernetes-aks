@@ -14,7 +14,6 @@ output "next_steps" {
 
     Você verá uma mensagem "404 Not Found" do NGINX - isso é esperado!
 
-    -> Prossiga para o próximo LAB de kubernetes na Azure
 EOT
 }
 
