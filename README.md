@@ -6,7 +6,7 @@ Kubernetes é uma plataforma open source que automatiza o deploy, o gerenciament
 É o serviço gerenciado da Microsoft para orquestração de containers baseado no Kubernetes.
 
 Principais benefícios:
-- simplifica operções: Cuida do plano de controle (master nodes) automaticamente;
+- Simplifica operções: Cuida do plano de controle (master nodes) automaticamente;
 - Escalabilidade automática: Ajusta nós e pods conforme demanda
 - Segurança integrada: RBAC, redes isoladas e políticas de segurança;
 - Custo otimizado: Possibilidade de usar camada gratuita e nós spot
@@ -56,10 +56,10 @@ Por exemplo, o Cluster IP padrão cria um IP apenas acessível dentro do cluster
     - Evita que um Pod consuma todos os recursos do nó
     - Previne 'vizinhos barulhentos' (noisy neighbors)
 
-### Liveness probe e Readness probe - Monitoramento
+### Liveness probe e Readiness probe - Monitoramento
 Fazem o helth check dos pods para determinar se ele será encerrado e inciado um novo.
 - Liveness: Verifica se o app está rodando
-- Readness: Verifica se o app está pronto para receber tráfego
+- Readiness: Verifica se o app está pronto para receber tráfego
 
 ### HPA - Horizontal Pod Autoscaling
 Controlador que utiliza métricas para ajustar automaticamente o número de réplicas
